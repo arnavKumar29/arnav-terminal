@@ -79,37 +79,41 @@ export function SettingsApp() {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground select-none">
-      <header
+    <div className="flex h-screen bg-background text-foreground select-none">
+      {/* Absolute Header for Drag Region */}
+      <div 
         data-tauri-drag-region
-        className={`flex h-11 shrink-0 items-center border-b border-border/60 bg-card/60 ${IS_MAC ? "pr-3 pl-22" : "pr-0 pl-3"
-          }`}
+        className={`absolute top-0 left-0 right-0 h-10 flex items-center z-50 pointer-events-none ${IS_MAC ? "pl-22" : "pr-2"}`}
       >
-        <Tabs
-          value={active}
-          onValueChange={(v) => setActive(v as SettingsTab)}
-          orientation="horizontal"
-          className="flex-1 items-center"
-          data-tauri-drag-region
-        >
-          <TabsList className="mx-auto h-7 bg-muted/40 px-2">
-            {TABS.map((t) => (
-              <TabsTrigger
-                key={t.id}
-                value={t.id}
-                className="h-6 gap-1.5 px-2.5 text-[11.5px]"
-              >
-                <HugeiconsIcon icon={t.icon} size={12} strokeWidth={1.75} />
-                <span>{t.label}</span>
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-        {USE_CUSTOM_WINDOW_CONTROLS && <WindowControls closeOnly />}
-      </header>
+        {USE_CUSTOM_WINDOW_CONTROLS && (
+          <div className="ml-auto flex items-center pointer-events-auto">
+             <WindowControls closeOnly />
+          </div>
+        )}
+      </div>
 
-      <main className="min-h-0 flex-1 overflow-y-auto px-8 pt-6 pb-7 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="mx-auto w-full max-w-160">
+      {/* Sidebar Navigation */}
+      <aside className="w-56 shrink-0 border-r border-border/40 bg-muted/10 flex flex-col pt-12 px-4 gap-1.5 z-40">
+        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 mb-3 px-2">Settings</div>
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setActive(t.id)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              active === t.id 
+                ? "bg-primary text-primary-foreground shadow-sm" 
+                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+            }`}
+          >
+            <HugeiconsIcon icon={t.icon} size={16} strokeWidth={2} />
+            <span>{t.label}</span>
+          </button>
+        ))}
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto px-10 pt-12 pb-10 bg-background/50">
+        <div className="mx-auto w-full max-w-2xl">
           {ActiveSection && <ActiveSection />}
         </div>
       </main>

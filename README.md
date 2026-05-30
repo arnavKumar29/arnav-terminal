@@ -1,116 +1,70 @@
-<div align="center">
-  <img src="public/logo.png" width="144" height="144" alt="arnavterminal" />
-  <h1>arnavterminal</h1>
+# Arnav Terminal
+**Your Next-Generation AI Workspace**
 
-  <p><strong>Lightweight Terminal-first AI-native dev workspace.</strong></p>
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-black)](https://github.com/arnavKumar29/arnav-terminal)
+[![Release](https://img.shields.io/github/v/release/arnavKumar29/arnav-terminal?color=success)](#)
 
-  <p>
-    <img src="https://img.shields.io/github/v/release/arnavKumar29/arnav-terminal?label=version&color=blue" alt="version" />
-    <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey" alt="platform" />
-  </p>
-</div>
+Welcome to **Arnav Terminal**, a high-performance, aesthetically pleasing, and AI-first development environment. Built from the ground up for speed, power, and elegance, Arnav Terminal blends a lightning-fast Rust backend with an ultra-modern React frontend.
 
 ---
 
-arnavterminal is a lightweight open-source terminal (ADE) built on Tauri 2 + Rust and React 19. A native PTY backend with a WebGL renderer, an agentic AI side-panel that runs against your own keys or fully local models, plus a code editor, file explorer, source control with a git graph, and a web preview pane built in. About 7-8 MB on disk. No telemetry. No account.
+## 🚀 Why Arnav Terminal?
 
-## Features
+- **Unmatched Speed:** Powered by Tauri 2 and Rust, delivering native PTY execution with a WebGL-accelerated terminal (xterm.js).
+- **AI-Native:** It doesn't just have chat—it has *context*. Use Anthropic, OpenAI, or fully local models (Ollama, LM Studio) to edit your code, run bash commands, and manage your projects autonomously.
+- **Floating UI Aesthetic:** A unique glassmorphism and rounded-corner design gives your workspace a truly futuristic feel.
+- **Zero Bloat:** Completely local-first philosophy. No telemetry, no forced accounts, no hidden background tracking. 
 
-### Terminal
+## ⚡ Core Capabilities
 
-- xterm.js with WebGL renderer, multi-tab with background streaming
-- Native PTY backend via `portable-pty` (zsh, bash, pwsh, fish, cmd)
-- Split panels (horizontal and vertical)
-- Inline search, link detection, true-color
-- Per-tab workspace environments on Windows (Local, or any installed WSL distro)
+### 💻 The Terminal
+- Ultra-fast WebGL rendering engine.
+- Split-pane support (horizontal and vertical) for advanced multitasking.
+- Direct integration with Windows WSL and PowerShell out of the box.
 
-### Code editor
+### 🧠 The Intelligence
+- Agentic workflows that can read, write, grep, and execute terminal commands (with your permission).
+- Custom AI agents configured directly to your workflow.
+- Secure API key management stored in your OS keychain.
 
-- CodeMirror 6 (supports all popular languages - TS/JS, Rust, Python, Go, C/C++, Java, HTML/CSS, JSON, Markdown, etc.)
-- Inline AI autocomplete with local model support
-- AI edit diffs, accept or reject hunk by hunk
-- Vim mode
-- Ten built-in editor themes: Atom One, Aura, Copilot, GitHub Dark / Light, Gruvbox Dark, Nord, Tokyo Night, Xcode Dark / Light
+### 📝 The Editor
+- Integrated CodeMirror 6 with support for dozens of languages.
+- Real-time AI autocomplete and hunk-by-hunk diff reviewing.
+- Multi-theme support independent of the terminal theme.
 
-### Source control
+### 🌐 The Preview & Explorer
+- Built-in web preview for your local dev servers (localhost).
+- Native file explorer with fuzzy searching and context menus.
+- Stage, commit, and push straight from the integrated Git Graph UI.
 
-- Stage / unstage hunks, commit (Cmd+Enter / Ctrl+Enter), push with upstream awareness
-- Branch display including detached HEAD state
-- Git history pane with a real commit graph (lane rendering for merges and branches)
-- Commit search and filter, click through to the remote commit page
+## 🛠️ Getting Started
 
-### File explorer
+### Installation
+Head over to the [Releases](https://github.com/arnavKumar29/arnav-terminal/releases/latest) page and download the installer for your OS. The terminal will automatically keep itself updated.
 
-- Catppuccin icon theme
-- Fuzzy search, keyboard navigation, inline rename, context actions
-- Attach files and selections directly to the AI side-panel
+> **Windows Users:** On the very first run, Windows SmartScreen may pop up. Just click **More info** -> **Run anyway**. 
 
-### Web preview
+### Adding Your AI Brain
+1. Open the **Settings** menu.
+2. Navigate to the **AI** section.
+3. Select your provider (e.g., Anthropic, Gemini, Groq) and drop in your API key, or point it to your local model endpoint.
 
-- Auto-detects local dev servers and opens them in a preview tab
-- External URL preview via a native child webview
+## 🔧 Build It Yourself
 
-### Themes and customization
+Want to tinker? Here's how to build Arnav Terminal from source:
 
-- Custom themes built in-app, switch between bundled presets and your own
-- Create your own themes, share them or import from the community
-- Background images with adjustable opacity and blur
-- Editor theme is independent from the app theme
-
-### AI
-
-- **BYOK providers:** OpenAI, Anthropic, Google (Gemini), Groq, xAI (Grok), Cerebras, OpenRouter, DeepSeek, Mistral, plus any OpenAI-compatible endpoint
-- **Local / offline:** LM Studio, MLX, Ollama
-- **Agentic workflow:** plans, sub-agents, project memory via `arnavterminal.md`, file read / write / edit / multi-edit / grep / glob, bash with approval gating, background processes
-- **Composer:** snippets via `#handle`, files via `@path`, slash commands, voice input, attach-to-agent from explorer or selection
-- **Custom agents** with their own system prompt and tool subset
-- **Plan mode** for multi-step work, generates and confirms before doing
-
-## Install
-
-Latest installers are on the [Releases](https://github.com/arnavKumar29/arnav-terminal/releases/latest) page. arnavterminal auto-updates from there.
-
-### Windows notes
-
-- On first launch Windows shows "Windows protected your PC" because arnavterminal isn't code-signed yet (will be fixed soon). Click **More info** then **Run anyway**.
-- Default shell detection: `pwsh.exe` (PowerShell 7+) -> `powershell.exe` (Windows PowerShell 5.1), -> `cmd.exe`.
-- WSL is a first-class workspace environment, not a wrapped subprocess.
-
-### Linux notes
-
-- **Arch / AUR:** `yay -S arnavterminal-bin` (or `paru`, etc.). Tracks the latest release.
-- **AppImage:** needs FUSE. Without it: `./arnavterminal_*.AppImage --appimage-extract-and-run`. On Wayland with rendering glitches, try `WEBKIT_DISABLE_DMABUF_RENDERER=1`. Otherwise the `.deb` / `.rpm` packages link against the system GTK stack and tend to be smoother.
-
-## Configure AI
-
-1. Open **Settings -> AI**.
-2. Pick a provider and paste your API key. For local inference, point arnavterminal at your LM Studio / MLX / Ollama endpoint.
-3. Keys are written to the OS keychain via `keyring`. They never touch disk or localStorage.
-
-## Build from source
-
-**Prerequisites**
-- Rust (stable), https://rustup.rs
-- Node 20+ and [pnpm](https://pnpm.io)
-- Tauri prerequisites for your platform, https://tauri.app/start/prerequisites/
-
-**Run**
 ```bash
+# Install dependencies
 pnpm install
-pnpm tauri dev          # development
-pnpm tauri build        # production bundle
+
+# Run the development server
+pnpm tauri dev
+
+# Build the final executable
+pnpm tauri build
 ```
 
-**Checks**
-```bash
-pnpm exec tsc --noEmit          # frontend type-check
-cd src-tauri && cargo clippy    # Rust lint
-```
+**Requirements:** Node.js 20+, pnpm, and Rust stable.
 
-## Tech stack
-
-Tauri 2, Rust, `portable-pty`, React 19, TypeScript, xterm.js, CodeMirror 6, Vercel AI SDK v6, Tailwind v4, shadcn/ui, Zustand.
-
-## Contributing
-
-Issues and PRs are welcome! Feel free to open issues, suggest features, or submit pull requests.
+---
+*Arnav Terminal - Engineered for the modern developer.*

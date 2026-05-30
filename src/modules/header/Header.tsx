@@ -106,11 +106,11 @@ export function Header({
     <Button
       variant="ghost"
       size="icon"
-      className="size-7 shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
+      className="size-8 shrink-0 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
       onClick={onOpenSettings}
       title="Settings"
     >
-      <HugeiconsIcon icon={Settings01Icon} size={15} strokeWidth={1.75} />
+      <HugeiconsIcon icon={Settings01Icon} size={18} strokeWidth={2} />
     </Button>
   );
 
@@ -118,8 +118,8 @@ export function Header({
     <div
       ref={rootRef}
       data-tauri-drag-region
-      className={`flex h-10 shrink-0 items-center gap-2 border-b border-border/60 bg-card select-none ${
-        IS_MAC ? "pr-2 pl-20" : "pr-0 pl-2"
+      className={`flex h-12 shrink-0 items-center gap-2.5 border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-sm select-none ${
+        IS_MAC ? "pr-3 pl-20" : "pr-1 pl-3"
       }`}
     >
       <div className="flex shrink-0 items-center gap-0.5">
@@ -127,22 +127,22 @@ export function Header({
           onClick={onToggleSidebar}
           title="Toggle sidebar"
           variant="ghost"
-          size="icon-sm"
-          className="shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
+          size="icon"
+          className="shrink-0 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
         >
-          <HugeiconsIcon icon={SidebarLeftIcon} size={18} strokeWidth={1.75} />
+          <HugeiconsIcon icon={SidebarLeftIcon} size={18} strokeWidth={2} />
         </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              size="icon-sm"
-              className="shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-50"
+              size="icon"
+              className="shrink-0 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50"
               title="Split terminal"
               disabled={!canSplit}
             >
-              <HugeiconsIcon icon={GridViewIcon} size={16} strokeWidth={1.75} />
+              <HugeiconsIcon icon={GridViewIcon} size={18} strokeWidth={2} />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="min-w-44">
