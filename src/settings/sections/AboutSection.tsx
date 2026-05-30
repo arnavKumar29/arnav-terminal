@@ -95,28 +95,6 @@ export function AboutSection() {
         <dt className="text-muted-foreground">License</dt>
         <dd>Apache 2.0</dd>
 
-        <dt className="text-muted-foreground">Source code</dt>
-        <dd>
-          <button
-            type="button"
-            onClick={() => void openUrl(REPO_URL)}
-            className="inline-flex items-center gap-1.5 rounded-md text-[12px] underline-offset-2 hover:text-foreground hover:underline"
-          >
-            <HugeiconsIcon icon={GithubIcon} size={12} strokeWidth={1.75} />
-            arnav/arnav-terminal
-          </button>
-        </dd>
-        <dt className="text-muted-foreground">Website</dt>
-        <dd>
-          <button
-            type="button"
-            onClick={() => void openUrl(WEBSITE)}
-            className="inline-flex items-center gap-1.5 rounded-md text-[12px] underline-offset-2 hover:text-foreground hover:underline"
-          >
-            <HugeiconsIcon icon={Globe02Icon} size={12} strokeWidth={1.75} />
-            arnavterminal.app
-          </button>
-        </dd>
       </dl>
 
       <div className="flex flex-col gap-1.5">
@@ -127,15 +105,6 @@ export function AboutSection() {
             disabled={checking || downloading || ready}
           >
             {checkLabel}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => void openUrl(REPO_URL)}
-            className="gap-1.5"
-          >
-            <HugeiconsIcon icon={GithubIcon} size={12} strokeWidth={1.75} />
-            View on GitHub
           </Button>
           <Button
             variant="ghost"

@@ -78,11 +78,11 @@ export function SettingsApp() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-background text-foreground select-none">
+    <div className="flex h-screen bg-background/80 backdrop-blur-2xl text-foreground select-none">
       {/* Absolute Header for Drag Region */}
       <div 
         data-tauri-drag-region
-        className={`absolute top-0 left-0 right-0 h-10 flex items-center z-50 pointer-events-none ${IS_MAC ? "pl-22" : "pr-2"}`}
+        className={`absolute top-0 left-0 right-0 h-10 flex items-center z-50 ${IS_MAC ? "pl-22" : "pr-2"}`}
       >
         {USE_CUSTOM_WINDOW_CONTROLS && (
           <div className="ml-auto flex items-center pointer-events-auto">
