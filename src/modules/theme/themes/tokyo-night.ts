@@ -1,0 +1,51 @@
+import type { Theme } from "../types";
+
+export const tokyoNight: Theme = {
+  id: "tokyo-night",
+  name: "Midnight Matrix",
+  description: "Cyberpunk-inspired dark theme with neon green accents.",
+  editorTheme: { dark: "tokyo-night" },
+  variants: {
+    dark: {
+      colors: {
+        background: "#000000",
+        foreground: "#00ff00",
+        card: "#0a0a0a",
+        cardForeground: "#00ff00",
+        popover: "#0a0a0a",
+        popoverForeground: "#00ff00",
+        primary: "#00ff00",
+        primaryForeground: "#000000",
+        secondary: "#292e42",
+        secondaryForeground: "#c0caf5",
+        muted: "#292e42",
+        mutedForeground: "#9aa5ce",
+        accent: "#292e42",
+        accentForeground: "#c0caf5",
+        destructive: "#f7768e",
+        border: "rgba(255,255,255,0.08)",
+        input: "rgba(255,255,255,0.12)",
+        ring: "#7aa2f7",
+        sidebar: "#050505",
+        sidebarForeground: "#00ff00",
+        sidebarPrimary: "#00ff00",
+        sidebarPrimaryForeground: "#000000",
+        sidebarAccent: "#111111",
+        sidebarAccentForeground: "#00ff00",
+        sidebarBorder: "rgba(0,255,0,0.2)",
+        sidebarRing: "#00ff00",
+      },
+      terminal: {
+        cursor: "#c0caf5",
+        cursorAccent: "#1a1b26",
+        selection: "rgba(122,162,247,0.25)",
+        ansi: [
+          "#15161e", "#f7768e", "#9ece6a", "#e0af68",
+          "#7aa2f7", "#bb9af7", "#7dcfff", "#a9b1d6",
+          "#414868", "#ff7a93", "#b9f27c", "#ff9e64",
+          "#7da6ff", "#bb9af7", "#0db9d7", "#c0caf5",
+        ],
+      },
+    },
+  },
+};
