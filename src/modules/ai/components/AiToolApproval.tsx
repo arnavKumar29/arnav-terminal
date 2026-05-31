@@ -17,7 +17,7 @@ import { memo } from "react";
 type Props = {
   part: Extract<ToolUIPart, { state: "approval-requested" }>;
   toolName: string;
-  onRespond: (approved: boolean) => void;
+  onRespond: (approved: boolean, runInTerminal?: boolean) => void;
 };
 
 const TOOL_META: Record<string, { label: string; icon: typeof FilePlusIcon }> =
@@ -68,15 +68,38 @@ function AiToolApprovalImpl({ part, toolName, onRespond }: Props) {
           <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} />
           Deny
         </Button>
-        <Button
-          size="sm"
-          variant="default"
-          onClick={() => onRespond(true)}
-          className="h-7 gap-1.5 text-[11px]"
-        >
-          <HugeiconsIcon icon={Tick02Icon} size={12} strokeWidth={2} />
-          Approve
-        </Button>
+        {toolName === "bash_run" ? (
+          <>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => onRespond(true, false)}
+              className="h-7 gap-1.5 text-[11px]"
+            >
+              <HugeiconsIcon icon={Tick02Icon} size={12} strokeWidth={2} />
+              Approve (Background)
+            </Button>
+            <Button
+              size="sm"
+              variant="default"
+              onClick={() => onRespond(true, true)}
+              className="h-7 gap-1.5 text-[11px]"
+            >
+              <HugeiconsIcon icon={TerminalIcon} size={12} strokeWidth={2} />
+              Run in Terminal
+            </Button>
+          </>
+        ) : (
+          <Button
+            size="sm"
+            variant="default"
+            onClick={() => onRespond(true)}
+            className="h-7 gap-1.5 text-[11px]"
+          >
+            <HugeiconsIcon icon={Tick02Icon} size={12} strokeWidth={2} />
+            Approve
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -119,19 +142,20 @@ function PreviewBlock({
       </div>
     );
   }
-  // For file mutations we deliberately do NOT preview content here —
-  // streamed write/edit content thrashes the UI and the AI diff tab is the
-  // authoritative place to review the change. Show just the path + a
-  // one-line size hint so the user knows what's being touched.
+
+  // File mutations
   if (toolName === "write_file") {
     const content = typeof input.content === "string" ? input.content : "";
     const lines = content ? content.split("\n").length : 0;
+    const path = String(input.path ?? "");
     return (
-      <div className="space-y-0.5 font-mono text-[11px]">
-        <div className="text-muted-foreground">{String(input.path ?? "")}</div>
+      <div className="space-y-1.5 font-mono text-[11px]">
         <div className="text-[10.5px] text-muted-foreground/80">
           {lines} line{lines === 1 ? "" : "s"} · review in the diff tab
         </div>
+        <pre className="max-h-20 overflow-auto rounded-md bg-muted/60 p-2 text-muted-foreground whitespace-pre-wrap">
+          {`cat > "${path}" << 'EOF'\n... (${lines} lines)\nEOF`}
+        </pre>
       </div>
     );
   }
@@ -140,16 +164,16 @@ function PreviewBlock({
     const newStr = typeof input.new_string === "string" ? input.new_string : "";
     const removed = oldStr ? oldStr.split("\n").length : 0;
     const added = newStr ? newStr.split("\n").length : 0;
+    const path = String(input.path ?? "");
     return (
-      <div className="space-y-0.5 font-mono text-[11px]">
-        <div className="text-muted-foreground">
-          {String(input.path ?? "")}
-          {input.replace_all ? " · replace all" : ""}
-        </div>
+      <div className="space-y-1.5 font-mono text-[11px]">
         <div className="text-[10.5px] text-muted-foreground/80">
           −{removed} / +{added} line{added === 1 && removed === 1 ? "" : "s"} ·
           review in the diff tab
         </div>
+        <pre className="max-h-20 overflow-auto rounded-md bg-muted/60 p-2 text-muted-foreground whitespace-pre-wrap">
+          {`# Edit ${path}`}
+        </pre>
       </div>
     );
   }
@@ -157,20 +181,26 @@ function PreviewBlock({
     const edits = Array.isArray(input.edits)
       ? (input.edits as Array<{ old_string?: string; new_string?: string }>)
       : [];
+    const path = String(input.path ?? "");
     return (
-      <div className="space-y-0.5 font-mono text-[11px]">
-        <div className="text-muted-foreground">{String(input.path ?? "")}</div>
+      <div className="space-y-1.5 font-mono text-[11px]">
         <div className="text-[10.5px] text-muted-foreground/80">
           {edits.length} edit{edits.length === 1 ? "" : "s"} · review in the
           diff tab
         </div>
+        <pre className="max-h-20 overflow-auto rounded-md bg-muted/60 p-2 text-muted-foreground whitespace-pre-wrap">
+          {`# Batch edit ${path}`}
+        </pre>
       </div>
     );
   }
   if (toolName === "create_directory") {
+    const path = String(input.path ?? "");
     return (
-      <div className="font-mono text-[11px] text-muted-foreground">
-        {String(input.path ?? "")}
+      <div className="space-y-1.5">
+        <pre className="max-h-20 overflow-auto rounded-md bg-muted/60 p-2 font-mono text-[11px] leading-relaxed text-muted-foreground">
+          {`mkdir -p "${path}"`}
+        </pre>
       </div>
     );
   }

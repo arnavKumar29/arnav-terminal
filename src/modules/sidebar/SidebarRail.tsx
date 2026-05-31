@@ -21,12 +21,14 @@ type Props = {
 export function SidebarRail({ activeView, onSelectView, changedCount }: Props) {
   const items: RailItem[] = [
     { id: "explorer", label: "Files", icon: FolderTreeIcon },
+    /*
     {
       id: "source-control",
       label: "Source Control",
       icon: FolderGitTwoIcon,
       badge: changedCount,
     },
+    */
   ];
 
   return (

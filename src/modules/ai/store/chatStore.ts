@@ -98,6 +98,7 @@ export type PendingSelection = {
 export type ApprovalResponder = (
   approvalId: string,
   approved: boolean,
+  runInTerminal?: boolean,
 ) => void;
 
 type StoreState = {
@@ -111,7 +112,10 @@ type StoreState = {
    */
   approvalResponder: ApprovalResponder | null;
   setApprovalResponder: (fn: ApprovalResponder | null) => void;
-  respondToApproval: (approvalId: string, approved: boolean) => void;
+  respondToApproval: (approvalId: string, approved: boolean, runInTerminal?: boolean) => void;
+
+  toolPreferences: Record<string, "terminal" | "background">;
+  setToolPreference: (id: string, pref: "terminal" | "background") => void;
 
   apiKeys: ProviderKeys;
   setApiKeys: (keys: ProviderKeys) => void;
@@ -318,9 +322,16 @@ export const useChatStore = create<StoreState>((set, get) => ({
 
   approvalResponder: null,
   setApprovalResponder: (fn) => set({ approvalResponder: fn }),
-  respondToApproval: (approvalId, approved) => {
+  respondToApproval: (approvalId, approved, runInTerminal) => {
     const fn = get().approvalResponder;
-    if (fn) fn(approvalId, approved);
+    if (fn) fn(approvalId, approved, runInTerminal);
+  },
+
+  toolPreferences: {},
+  setToolPreference: (id, pref) => {
+    set((s) => ({
+      toolPreferences: { ...s.toolPreferences, [id]: pref },
+    }));
   },
 
   apiKeys: { ...EMPTY_PROVIDER_KEYS },

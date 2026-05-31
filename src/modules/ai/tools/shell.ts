@@ -4,6 +4,7 @@ import { native } from "../lib/native";
 import { checkShellCommand } from "../lib/security";
 import type { ToolContext } from "./context";
 import { currentWorkspaceEnv, workspaceScopeKey } from "@/modules/workspace";
+import { useChatStore } from "../store/chatStore";
 
 /**
  * Per-session lazy shell-session id. The agent gets one persistent shell per
@@ -37,12 +38,31 @@ export function buildShellTools(ctx: ToolContext) {
         timeout_secs: z.number().int().min(1).max(300).optional(),
       }),
       needsApproval: true,
-      execute: async ({ command, timeout_secs }) => {
+      execute: async ({ command, timeout_secs }, options) => {
         const safety = checkShellCommand(command);
         if (!safety.ok) return { error: safety.reason };
         const sid = ctx.getSessionId();
         if (!sid) return { error: "no active chat session" };
         try {
+          const pref = options?.toolCallId 
+            ? useChatStore.getState().toolPreferences[options.toolCallId] 
+            : undefined;
+
+          if (pref === "terminal") {
+            ctx.injectIntoActivePty(command + "\r");
+            await new Promise(r => setTimeout(r, 500));
+            // Return some text to the AI indicating it was run visibly
+            return {
+              command,
+              stdout: `Command injected into user's terminal. (Output not captured directly)`,
+              stderr: "",
+              exit_code: 0,
+              timed_out: false,
+              truncated: false,
+              cwd_after: ctx.getCwd(),
+            };
+          }
+
           const cwd = ctx.getCwd();
           const shellId = await getSessionShell(workspaceSessionKey(sid), cwd);
           const r = await native.shellSessionRun(

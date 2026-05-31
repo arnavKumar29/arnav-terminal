@@ -507,6 +507,36 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleRunCode = (e: Event) => {
+      const path = (e as CustomEvent<string>).detail;
+      const ext = path.split('.').pop()?.toLowerCase();
+      let cmd = "";
+      if (ext === "py") cmd = `python "${path}"\r`;
+      else if (ext === "js") cmd = `node "${path}"\r`;
+      else if (ext === "ts") cmd = `npx tsx "${path}"\r`;
+      else if (ext === "rs") cmd = `cargo run\r`;
+      else if (ext === "go") cmd = `go run "${path}"\r`;
+      else if (ext === "c" || ext === "cpp") cmd = `gcc "${path}" -o a.out && ./a.out\r`;
+      else if (ext === "java") cmd = `java "${path}"\r`;
+      else if (ext === "sh" || ext === "bash" || ext === "zsh") cmd = `bash "${path}"\r`;
+      else if (ext === "ps1") cmd = `powershell -File "${path}"\r`;
+      else if (ext === "rb") cmd = `ruby "${path}"\r`;
+      else cmd = `echo "Cannot run file type: .${ext}"\r`;
+
+      const tabId = newTab();
+      setTimeout(() => {
+        const currentTabs = tabsRef.current;
+        const newTerm = currentTabs.find(t => t.id === tabId);
+        if (newTerm && newTerm.kind === "terminal") {
+          writeToSession(newTerm.activeLeafId, cmd);
+        }
+      }, 1000);
+    };
+    window.addEventListener("arnavterminal:run-code", handleRunCode);
+    return () => window.removeEventListener("arnavterminal:run-code", handleRunCode);
+  }, [newTab, setActiveId]);
+
   const editorWatchRef = useRef<Set<string>>(new Set());
   useEffect(() => {
     const want = new Set<string>();

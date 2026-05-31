@@ -200,7 +200,12 @@ export function AiChatView({
     !isBusy && hitStepCap && lastMessage?.role === "assistant";
 
   const onApproval = useCallback(
-    (id: string, approved: boolean) => addToolApprovalResponse({ id, approved }),
+    (id: string, approved: boolean, runInTerminal?: boolean) => {
+      if (runInTerminal !== undefined) {
+        useChatStore.getState().setToolPreference(id, runInTerminal ? "terminal" : "background");
+      }
+      addToolApprovalResponse({ id, approved });
+    },
     [addToolApprovalResponse],
   );
 
@@ -323,7 +328,7 @@ const RenderedMessage = memo(function RenderedMessage({
   streaming,
 }: {
   message: UIMessage;
-  onApproval: (id: string, approved: boolean) => void;
+  onApproval: (id: string, approved: boolean, runInTerminal?: boolean) => void;
   streaming: boolean;
 }) {
   // Index of the trailing text part — only that one is "live" mid-stream.
@@ -597,7 +602,7 @@ const RenderedPart = memo(function RenderedPart({
   streaming,
 }: {
   part: AnyPart;
-  onApproval: (id: string, approved: boolean) => void;
+  onApproval: (id: string, approved: boolean, runInTerminal?: boolean) => void;
   streaming: boolean;
 }) {
   if (part.type === "text") {
@@ -639,7 +644,7 @@ const RenderedTool = memo(function RenderedTool({
   onApproval,
 }: {
   part: AnyToolPart;
-  onApproval: (id: string, approved: boolean) => void;
+  onApproval: (id: string, approved: boolean, runInTerminal?: boolean) => void;
 }) {
   const toolName =
     part.type === "dynamic-tool"
@@ -651,7 +656,7 @@ const RenderedTool = memo(function RenderedTool({
       <AiToolApproval
         part={part as Extract<ToolUIPart, { state: "approval-requested" }>}
         toolName={toolName}
-        onRespond={(approved) => onApproval(part.approval.id, approved)}
+        onRespond={(approved, runInTerminal) => onApproval(part.approval.id, approved, runInTerminal)}
       />
     );
   }

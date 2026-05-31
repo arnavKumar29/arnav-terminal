@@ -303,7 +303,21 @@ export const EditorPane = forwardRef<EditorPaneHandle, Props>(
     }
 
     return (
-      <div className="flex h-full min-h-0 flex-col">
+      <div className="flex h-full min-h-0 flex-col relative">
+        <div className="absolute top-2 right-4 z-10">
+          <button
+            className="flex items-center justify-center rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-semibold shadow-md hover:bg-primary/90 transition-colors"
+            onClick={async () => {
+              await saveRef.current();
+              onSavedRef.current?.();
+              window.dispatchEvent(
+                new CustomEvent("arnavterminal:run-code", { detail: pathRef.current })
+              );
+            }}
+          >
+            ▶ Run
+          </button>
+        </div>
         <CodeMirror
           ref={cmRef}
           value={doc.content}
